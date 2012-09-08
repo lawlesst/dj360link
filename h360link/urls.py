@@ -9,7 +9,7 @@ import resolver
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'h360link.views.home', name='home'),
-    url(r'$', include('resolver.urls')),
+    url(r'', include('resolver.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

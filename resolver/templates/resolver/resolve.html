@@ -1,5 +1,35 @@
-<html>
-<h1>
-Hello
-</h1>
-</html>
+{% extends "resolver/base.html" %}
+
+{% block content %}
+
+<div>
+    <h1>{{ citation.title }}</h1>
+    <p>by {{ citation.creator }}</p>
+    <p class="source"> {{ citation.source }}.  {{ citation.date }}.  pg. {{ citation.spage }}</p>
+</div>
+
+<div>
+    {% if has_full_text %}
+        <h3>Full text online</h3>
+        <ul>
+        {% for link in links %}
+            <li><a href="{{ link.url.article }}">{{ link.holdingData.databaseName }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+    <p> No links found.  Try your luck with ILL?</p>
+    {% endif %}
+
+</div>
+
+{% if citation.doi %}
+    <aside>
+        <p><a href="http://scholar.google.com/scholar?cites=http://dx.doi.org/{{ citation.doi }}">Citing articles via Google Scholar</a>
+    </aside>
+{% endif %}
+
+<h3>{{ library }}</h3>
+
+{% endblock %}
+
+
