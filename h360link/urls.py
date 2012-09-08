@@ -4,10 +4,12 @@ from django.conf.urls import patterns, include, url
 # from django.contrib import admin
 # admin.autodiscover()
 
+import resolver
+
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'h360link.views.home', name='home'),
-    # url(r'^h360link/', include('h360link.foo.urls')),
+    url(r'$', include('resolver.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
