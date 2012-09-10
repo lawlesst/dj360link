@@ -4,7 +4,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Ted Lawless', 'lawlesst@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -160,8 +160,12 @@ INSTALLED_APPS += (
 
 #Static files
 import os
-PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-STATIC_ROOT= os.path.join(PROJECT_ROOT,'staticfiles/')
-
+PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
+STATIC_ROOT= os.path.join(PROJECT_PATH,'staticfiles')
+STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_PATH, 'static'),
+)
+    
 #Resolver app
 SERSOL_KEY = 'rl3tp7zf5x'
