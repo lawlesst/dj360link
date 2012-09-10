@@ -5,4 +5,4 @@ gunicorn==0.14.6
 #local
 lxml
 #git+git://github.com/lawlesst/py360link.git
--e git+http//:github.com/lawlesst/py360link.git#egg=py360link
+-e git+http://github.com/lawlesst/py360link.git#egg=py360link
