@@ -4,4 +4,5 @@ psycopg2==2.4.5
 gunicorn==0.14.6
 #local
 lxml
-git+git://github.com/lawlesst/py360link.git
+#git+git://github.com/lawlesst/py360link.git
+https://github.com/lawlesst/py360link/zipball/master
