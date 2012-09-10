@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.cache import cache
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.generic import TemplateView
 from django.core.urlresolvers import get_script_prefix
@@ -13,7 +13,7 @@ from utils import JSONResponseMixin
 from py360link import get_sersol_data, Resolved
 
 #Default sersol key
-SERSOL_KEY = 'rl3tp7zf5x'
+from app_settings import SERSOL_KEY
 
 class ResolveView(TemplateView, JSONResponseMixin):
     template_name = 'resolver/resolve.html'
@@ -43,9 +43,10 @@ class ResolveView(TemplateView, JSONResponseMixin):
         #do we have a link to full text?
         context['has_full_text'] = self.has_full_text(resolved.link_groups)
         context['links'] = links
-
         context['type'] = resolved.format
         context['library'] = resolved.library
+        context['openurl'] = resolved.openurl
+        context['permalink'] = self.permalink(resolved.citation)
         return context
 
     def render_to_response(self, context):
@@ -68,4 +69,22 @@ class ResolveView(TemplateView, JSONResponseMixin):
             if link['url'].get('article'):
                 return True
         return False
+
+    def permalink(self, citation):
+        """
+        Create permalinks for OpenURLs that resolve to citations with PMIDs or DOIs.
+        """
+        base = "http://%s%s" % (self.request.META.get('HTTP_HOST').rstrip('/'),
+                                 self.request.META.get('PATH_INFO').rstrip('/'))
+        if citation.get('pmid'):
+            return "%s/?pmid=%s" % (base, citation.get('pmid'))
+        elif citation.get('doi'):
+            return "%s/?doi=%s" % (base, citation.get('doi'))
+        else:
+            #To create permalinks for other metadata you could add a view that will save the OpenURL
+            #to a database and assign a short link, e.g. '/get/b23', that would resolve
+            #that url when accessed again.  
+            return
+
+
 

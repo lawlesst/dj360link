@@ -157,3 +157,6 @@ INSTALLED_APPS += (
     'gunicorn',
     'resolver',
 )
+
+#Resolver app
+SERSOL_KEY = 'rl3tp7zf5x'

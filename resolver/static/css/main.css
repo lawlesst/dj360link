@@ -157,29 +157,32 @@ nav a:hover {
    Author's custom styles
    ========================================================================== */
 
-.header-container, .footer-container, .main aside {
-    background: rgba(44, 67, 233, 0.39);
+.footer-container, .main aside {
+    border: 0px;
+}
+
+.header-container, .footer-container {
+    background: #2D2A62;
+}
+
+.main aside {
+    background: white;
 }
 
 .header-container {
-    border-bottom: 20px solid navy;
+    border-bottom: 0px solid navy;
 }
 
-nav a {
-    background: navy;
+.footer-container {
 }
 
-.footer-container, .main aside {
-    border-top: 20px solid navy;
+h1.title, .footer {
+    font-size: 14px;
 }
 
-.footer-container footer {
-    padding: 1px 0;
+.footer-container .wrapper {
+    margin:0;
 }
-
-.wrapper {}
-
-
 
 
 

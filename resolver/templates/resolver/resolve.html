@@ -1,9 +1,14 @@
 {% extends "resolver/base.html" %}
 
+{%block library_name%}
+{{ library }}
+{%endblock%}
+
 {% block content %}
 
 <div>
     <h1>{{ citation.title }}</h1>
+
     <p>by {{ citation.creator }}</p>
     <p class="source"> {{ citation.source }}.  {{ citation.date }}.  pg. {{ citation.spage }}</p>
 </div>
@@ -20,15 +25,18 @@
     <p> No links found.  Try your luck with ILL?</p>
     {% endif %}
 
+    <hr/>
+    <h3>More</h3>
+        <ul>
+            {% if permalink %}
+            <li><a href="{{ permalink }}">Permalink</a></li>
+            {% endif %}
+            <li><a href="http://www.refworks.com/express/expressimport.asp?{{ openurl }}">      Export to Refworks</a></li>
+            {% if citation.doi %}
+                <li><a href="http://scholar.google.com/scholar?cites=http://dx.doi.org/{{ citation.doi }}">Citing articles via Google Scholar</a></li>
+            {% endif %}
+        </ul>
 </div>
-
-{% if citation.doi %}
-    <aside>
-        <p><a href="http://scholar.google.com/scholar?cites=http://dx.doi.org/{{ citation.doi }}">Citing articles via Google Scholar</a>
-    </aside>
-{% endif %}
-
-<h3>{{ library }}</h3>
 
 {% endblock %}
 
