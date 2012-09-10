@@ -158,16 +158,28 @@ DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
 INSTALLED_APPS += (
     'gunicorn',
     'resolver',
+    'storages',
 )
 
 #Static files
 import os
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT= os.path.join(PROJECT_PATH,'staticfiles')
-STATIC_URL = '/static/'
+#STATIC_ROOT= os.path.join(PROJECT_PATH,'staticfiles')
 STATICFILES_DIRS = (
     os.path.join(PROJECT_PATH, 'static'),
 )
     
 #Resolver app
 SERSOL_KEY = 'rl3tp7zf5x'
+
+#S3
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = 'static-heroku-360link'
+
+STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+STATIC_URL = 'http://' + AWS_STORAGE_BUCKET_NAME + '.s3.amazonaws.com/'
+#ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
+STATIC_URL = STATIC_URL + '/static/'
