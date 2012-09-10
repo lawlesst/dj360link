@@ -33,6 +33,9 @@ class ResolveView(TemplateView, JSONResponseMixin):
     	"""
         context = super(ResolveView, self).get_context_data(**kwargs)
         query = self.request.META.get('QUERY_STRING', None)
+        if not query:
+            self.template_name = 'resolver/index.html'
+            return context
         #Return an index page if query isn't found. 
         if not query:
         	return context
