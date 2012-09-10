@@ -6,3 +6,5 @@ gunicorn==0.14.6
 lxml
 #git+git://github.com/lawlesst/py360link.git
 -e git+http://github.com/lawlesst/py360link.git#egg=py360link
+django-storages==1.1.5
+boto==2.5.2
