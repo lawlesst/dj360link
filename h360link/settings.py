@@ -180,5 +180,3 @@ AWS_STORAGE_BUCKET_NAME = 'static-heroku-360link'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 STATIC_URL = 'http://' +  's3.amazonaws.com/' + AWS_STORAGE_BUCKET_NAME 
-#ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
-STATIC_URL = STATIC_URL + '/static/'
