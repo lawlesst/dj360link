@@ -173,23 +173,29 @@ nav a:hover {
     border-bottom: 0px solid navy;
 }
 
-.footer-container {
-}
-
 h1.title, .footer {
     font-size: 14px;
 }
 
-.footer-container .wrapper {
-    margin:0;
+.footer-container footer {
+    color: white;
+    padding: 0px 0;
 }
 
+h1.title a {
+    color: white;
+    text-decoration: none;
+}
 
+h1.title a:hover {
+    text-decoration: underline;
+}
 
-
-
-
-
+.msg {
+    border: 2px solid gray;
+    padding: 1em;
+    width: 75%;
+}
 
 /* ==========================================================================
    Media Queries

@@ -33,6 +33,8 @@ class ResolveView(TemplateView, JSONResponseMixin):
     	"""
         context = super(ResolveView, self).get_context_data(**kwargs)
         query = self.request.META.get('QUERY_STRING', None)
+        if self.sersol_key != SERSOL_KEY:
+                context['customer'] = self.sersol_key
         if not query:
             self.template_name = 'resolver/index.html'
             return context

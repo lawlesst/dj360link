@@ -1,7 +1,10 @@
 {% extends "resolver/base.html" %}
 
 {%block library_name%}
-{{ library }}
+{% if customer %}
+<a href="/{{ customer }}/">{{ library }}</a>
+{% endif %}
+<a href="/">{{ library }}</a>
 {%endblock%}
 
 {% block content %}
@@ -22,7 +25,7 @@
         {% endfor %}
         </ul>
     {% else %}
-    <p> No links found.  Try your luck with ILL?</p>
+    <p class="msg"> No full text was found but you can place a <a href="#">request via Interlibrary Loan</a>.</p>
     {% endif %}
 
     <hr/>
@@ -38,6 +41,14 @@
         </ul>
 </div>
 
+{% endblock %}
+
+{% block footer_javascript %}
+<script>
+$('p.msg a').click(function () {
+    alert("Implement logic to place requests.")
+});
+</script>
 {% endblock %}
 
 

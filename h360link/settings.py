@@ -150,7 +150,7 @@ LOGGING = {
     }
 }
 ###########
-DEBUG = False
+#DEBUG = False
 
 import dj_database_url
 DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
@@ -179,4 +179,8 @@ AWS_STORAGE_BUCKET_NAME = 'static-heroku-360link'
 
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-STATIC_URL = 'http://' +  's3.amazonaws.com/' + AWS_STORAGE_BUCKET_NAME + '/'
+
+if DEBUG is True:
+    STATIC_URL = '/static/'
+else:
+    STATIC_URL = 'http://' +  's3.amazonaws.com/' + AWS_STORAGE_BUCKET_NAME + '/'
