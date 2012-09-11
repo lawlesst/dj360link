@@ -3,7 +3,7 @@
 {%block library_name%}
 {% if customer %}
 <a href="/{{ customer }}/">{{ library }}</a>
-{% endif %}
+{% else %}
 <a href="/">{{ library }}</a>
 {%endblock%}
 
