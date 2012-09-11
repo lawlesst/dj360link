@@ -1,0 +1,59 @@
+{% extends "resolver/base.html" %}
+
+{%block library_name%}
+Overview
+{%endblock%}
+
+{% block content %}
+
+<p>
+This is a simple link resolver using the 360Link API from Serials Solutions.
+</p>
+
+<div>
+        <form name="ourl" action="./" method="GET">
+            <fieldset>
+            <select name="qtype">
+            <option value="query">OpenURL</option>
+             <option value="pmid">PubmedID</option>
+            <option value="doi">DOI</option>
+            </select>    
+            <input type="text" size="75">
+            <input type="submit" value="Go">
+            <br/><br/>
+            <input type="text" size="30" placeholder="Optional 360 Link customer code." value="{{ customer }}">
+            <p>Paste an OpenURL, Pubmed ID, or DOI into the box and click Go.</p>
+            </fieldset>
+        </form>
+</div>
+{% endblock %}
+
+{% block footer_javascript %}
+<script>
+$("form").submit(function() {
+    //console.debug($('input'));
+    var qtype = $('select').val();
+    var q = $("input:first").val();
+    var base = window.location.href;
+    var customer = $("input:last").val();
+    if (customer != "") {
+        var customer_prefix = '/' + customer + '/' + url;
+    } else {
+        var customer_prefix = '';
+    };
+    if (qtype == 'query') {
+        
+        var url = window.location.href + customer_prefix + '?' + q;
+        
+    }
+    else if (qtype == 'pmid') {
+        var url = customer_prefix + '?pmid=' + q;
+    }
+    else if (qtype == 'doi') {
+        var url = customer_prefix + '?doi=' + q;
+    };
+    window.location.href = url;
+    return false;
+});
+</script>
+{% endblock %}
