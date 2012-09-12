@@ -1,4 +1,6 @@
 # Django settings for h360link project.
+import os
+PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -106,6 +108,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJECT_PATH, 'templates')
 )
 
 INSTALLED_APPS = (
@@ -150,7 +153,7 @@ LOGGING = {
     }
 }
 ###########
-DEBUG = False
+DEBUG = True
 
 import dj_database_url
 DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
@@ -162,8 +165,7 @@ INSTALLED_APPS += (
 )
 
 #Static files
-import os
-PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+
 #STATIC_ROOT= os.path.join(PROJECT_PATH,'staticfiles')
 STATICFILES_DIRS = (
     os.path.join(PROJECT_PATH, 'static'),
