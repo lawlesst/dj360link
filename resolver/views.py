@@ -32,6 +32,9 @@ http://localhost:8000/?genre=journal&issn=0036-8075&date=1995
 crossref content negotiation
 http://crosstech.crossref.org/2011/11/turning_dois_into_formatted_ci.html
 
+failing resolution
+http://localhost:8000/?doi=10.1177/1527002507808309
+
 """
 
 class ResolveView(TemplateView, JSONResponseMixin):
@@ -148,7 +151,6 @@ class ResolveView(TemplateView, JSONResponseMixin):
         headers = {'Accept': 'text/bibliography; style=apa;'}
         url = 'http://dx.doi.org/%s' % doi
         r = requests.head(url, headers=headers)
-
         try:
             return r.text
         except AttributeError:
