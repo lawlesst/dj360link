@@ -38,7 +38,7 @@
         {% if has_full_text %}
             <h3>Full text online</h3>
             <ul>
-            {% for link in links %}
+            {% for link in citation.links %}
                 {% ifequal link.type "article" %}
                     <li><a href="{{ link.url }}">{{ link.anchor }}</a></li>
                 {% endifequal %}
@@ -57,7 +57,7 @@
     {% ifequal debug True %}
         <h4> {{ type }} via {{ rfr }}</h4>
     {% endifequal %}
-    
+
     {% if permalink %}
     <h3>More</h3>
         <ul>
