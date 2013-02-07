@@ -9,39 +9,75 @@
 {%endblock%}
 
 {% block content %}
-
 <div>
-    <h1>{{ citation.title }}</h1>
-
-    <p>by {{ citation.creator }}</p>
-    <p class="source"> {{ citation.source }}.  {{ citation.date }}.  pg. {{ citation.spage }}</p>
-</div>
-
-<div>
-    {% if has_full_text %}
-        <h3>Full text online</h3>
+    {% ifequal type "journal" %}
+        <h2>{{ citation.journal.name }}</h2>
+        {% if citation.place_of_publication %} <p>{{ citation.place_of_publication }}</p> {% endif %}
+        {% if citation.publisher %} <p>{{ citation.publisher }}</p> {% endif %}
+        {% if citation.issn %} <p>ISSN: {{ citation.issn }}</p> {% endif %}
+        <h3>Online access</h3>
         <ul>
-        {% for link in links %}
-            <li><a href="{{ link.url.article }}">{{ link.holdingData.databaseName }}</a></li>
+        {% for link in citation.links %}
+            {% ifequal link.type "journal" %}
+                <li><a href="{{ link.url }}">{{ link.provider }}  {{ link.coverage_start }} - {{ link.coverage_end }}</a></li>
+            {% endifequal %}
         {% endfor %}
         </ul>
-    {% else %}
-    <p class="msg"> No full text was found but you can place a <a href="#">request via Interlibrary Loan</a>.</p>
-    {% endif %}
 
+    {% else %}
+        <h2>{{ citation.title }}</h2>
+        {% for author in citation.author %}
+        <p>by {{ author.name }}</p>
+        {% endfor %}
+        {% if citation.journal.name %}
+        <p class="source">{{ citation.journal.name }}.</p>
+        {% endif %}
+        <p>{{ citation.year }}.  {% if citation.pages %} pages: {{ citation.pages }} {% elif citation.start_page %} pg. {{ citation.start_page }}{% endif %}</p>
+
+        <div>
+        {% if has_full_text %}
+            <h3>Full text online</h3>
+            <ul>
+            {% for link in links %}
+                {% ifequal link.type "article" %}
+                    <li><a href="{{ link.url }}">{{ link.anchor }}</a></li>
+                {% endifequal %}
+            {% endfor %}
+            </ul>
+        {% else %}
+        <p class="msg"> No full text was found but you can place a <a href="#">request via Interlibrary Loan</a>.</p>
+        {% endif %}
+        </div>
+    {% endifequal %}
+</div>
+
+
+<div>
     <hr/>
+    {% ifequal debug True %}
+        <h4> {{ type }} via {{ rfr }}</h4>
+    {% endifequal %}
+    
+    {% if permalink %}
     <h3>More</h3>
         <ul>
             {% if permalink %}
             <li><a href="{{ permalink }}">Permalink</a></li>
             {% endif %}
-            <li><a href="http://www.refworks.com/express/expressimport.asp?{{ openurl }}">      Export to Refworks</a></li>
+            <!--<li><a href="http://www.refworks.com/express/expressimport.asp?{{ openurl }}"> Export to Refworks</a></li>-->
             {% if citation.doi %}
                 <li><a href="http://scholar.google.com/scholar?cites=http://dx.doi.org/{{ citation.doi }}">Citing articles via Google Scholar</a></li>
             {% endif %}
+            {% if citation.oclc %}
+                <li><a href="http://worldcat.org/oclc/{{ citation.oclc }}">Worldcat</a></li>
+            {% endif %}
         </ul>
+    {% endif %}
 </div>
 
+<div id="coin">
+    <span class="Z3988" title="{{ openurl }}"></span>
+</div>
 {% endblock %}
 
 {% block footer_javascript %}

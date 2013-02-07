@@ -32,3 +32,26 @@ class JSONResponseMixin(object):
         return json.dumps(context)
 
 
+def merge_bibjson(a, b) :
+    def _merge(a, b):
+        #https://github.com/okfn/bibserver/blob/bibwiki/bibserver/dao.py
+        for k, v in a.items():
+            if k.startswith('_') and k not in ['_collection']:
+                pass
+            if isinstance(v, dict) and k in b:
+                merge_bibjson(v, b[k])
+            elif isinstance(v, list) and k in b:
+                if not isinstance(b[k], list):
+                    b[k] = [b[k]]
+                for idx, item in enumerate(v):
+                    if isinstance(item,dict) and idx < len(b[k]):
+                        merge_bibjson(v[idx],b[k][idx])
+                    elif item not in b[k]:
+                        b[k].append(item)
+        a.update(b)
+        return a
+
+    out = _merge(a, b)
+    return out
+
+
