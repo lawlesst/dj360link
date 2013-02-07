@@ -10,6 +10,7 @@
 
 {% block content %}
 <div>
+    {% if apa %} {{ apa }} {% endif %}
     {% ifequal type "journal" %}
         <h2>{{ citation.journal.name }}</h2>
         {% if citation.place_of_publication %} <p>{{ citation.place_of_publication }}</p> {% endif %}
@@ -49,6 +50,9 @@
         {% endif %}
         </div>
     {% endifequal %}
+    {% if citation.doi %}
+        {{ citation.doi }}
+    {% endif %}
 </div>
 
 

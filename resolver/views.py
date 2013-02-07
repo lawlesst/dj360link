@@ -29,6 +29,9 @@ journal
 http://localhost:8000/?sid=FirstSearch%3AWorldCat&genre=journal&issn=2151-0814&title=Charter+school+law+deskbook.&id=doi%3A&pid=%3Caccession+number%3E436869608%3C%2Faccession+number%3E%3Cfssessid%3E0%3C%2Ffssessid%3E&url_ver=Z39.88-2004&rfr_id=info%3Asid%2Ffirstsearch.oclc.org%3AWorldCat&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&req_dat=%3Csessionid%3E0%3C%2Fsessionid%3E&rfe_dat=%3Caccessionnumber%3E436869608%3C%2Faccessionnumber%3E&rft_id=info%3Aoclcnum%2F436869608&rft_id=urn%3AISSN%3A2151-0814&rft.jtitle=Charter+school+law+deskbook.&rft.issn=2151-0814&rft.place=Charlottesville++VA&rft.pub=LexisNexis&rft.genre=journal&checksum=25d304e7598efe59760d18e8854b5090&title=Brown%20University&linktype=openurl&detail=RBN
 http://localhost:8000/?genre=journal&issn=0036-8075&date=1995
 
+crossref content negotiation
+http://crosstech.crossref.org/2011/11/turning_dois_into_formatted_ci.html
+
 """
 
 class ResolveView(TemplateView, JSONResponseMixin):
@@ -70,7 +73,11 @@ class ResolveView(TemplateView, JSONResponseMixin):
         links = citation.get('links')
         ids = citation.get('identifier', [])
 
-        citation['doi'] = self.get_identifer(ids, 'doi')
+        doi = self.get_identifer(ids, 'doi')
+        citation['doi'] = doi
+        if doi:
+            context['apa'] = self.get_csl(doi)
+
         citation['oclc'] = self.get_identifer(ids, 'oclc')
         citation['issn'] = self.get_identifer(ids, 'issn')
         context['citation'] = citation
@@ -135,6 +142,17 @@ class ResolveView(TemplateView, JSONResponseMixin):
                 #to a database and assign a short link, e.g. '/get/b23', that would resolve
                 #that url when accessed again.  
                 return
+
+    def get_csl(self, doi):
+        import requests
+        headers = {'Accept': 'text/bibliography; style=apa;'}
+        url = 'http://dx.doi.org/%s' % doi
+        r = requests.head(url, headers=headers)
+
+        try:
+            return r.text
+        except AttributeError:
+            return
 
 
 
