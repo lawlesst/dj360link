@@ -160,6 +160,9 @@ DATABASES = {'default': dj_database_url.config(default='sqlite:////work/dj360lin
 
 INSTALLED_APPS += (
     #'gunicorn',
+    'django.contrib.admin',
+    'jsonfield',
+    'south',
     'resolver',
     #'storages',
 )
@@ -178,6 +181,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
 )
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/var/tmp/dj360link_cache',
+    }
+}
+
 #Static files
 
 #STATIC_ROOT= os.path.join(PROJECT_PATH,'staticfiles')
@@ -186,7 +196,8 @@ STATICFILES_DIRS = (
 )
     
 #Resolver app
-SERSOL_KEY = 'rl3tp7zf5x'
+import os
+SERSOL_KEY = os.getenv('SERSOL_KEY')
 
 # #S3
 # AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY')
