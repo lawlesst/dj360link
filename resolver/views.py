@@ -10,9 +10,6 @@ from django.core.urlresolvers import get_script_prefix
 #standard lib
 import json
 import logging
-from pprint import pprint as pp
-import urllib
-import urlparse
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
