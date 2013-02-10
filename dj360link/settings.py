@@ -160,12 +160,10 @@ db = os.path.join(PROJECT_PATH, 'db.sqlite')
 DATABASES = {'default': dj_database_url.config(default='sqlite:///%s' % db)}
 
 INSTALLED_APPS += (
-    #'gunicorn',
     'django.contrib.admin',
     'jsonfield',
     'south',
     'resolver',
-    #'storages',
 )
 
 INTERNAL_IPS = ''
@@ -182,16 +180,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
 )
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/var/tmp/dj360link_cache',
-    }
-}
-
 #Static files
-
-#STATIC_ROOT= os.path.join(PROJECT_PATH,'staticfiles')
 STATICFILES_DIRS = (
     os.path.join(PROJECT_PATH, 'static'),
 )
@@ -200,15 +189,12 @@ STATICFILES_DIRS = (
 import os
 SERSOL_KEY = os.getenv('SERSOL_KEY')
 
-# #S3
-# AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY')
-# AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-# AWS_STORAGE_BUCKET_NAME = 'static-heroku-360link'
+#Cache resolver response
+RESOLVER_CACHE_ACTIVE = False
 
-# STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-
-# if DEBUG is True:
-#     STATIC_URL = '/static/'
-# else:
-#     STATIC_URL = 'http://' +  's3.amazonaws.com/' + AWS_STORAGE_BUCKET_NAME + '/'
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/var/tmp/dj360link_cache',
+    }
+}

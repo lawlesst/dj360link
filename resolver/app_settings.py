@@ -10,3 +10,5 @@ if not SERSOL_KEY:
     raise ImproperlyConfigured("Default 360Link key required. Place SERSOL_KEY in settings.py")
 
 PERMALINK_PREFIX = getattr(settings, 'RESOLVER_PERMALINK_PREFIX', 'ea')
+
+CACHE = getattr(settings, 'RESOLVER_CACHE_ACTIVE', True)

@@ -56,7 +56,11 @@ class ResolveView(BaseResolverView):
             citation = this_resource.bib
             openurl = to_openurl(citation)
         else:
-            cached_sersol = cache.get(query)
+            #Check to see if caching is activated.
+            if app_settings.CACHE is True:
+                cached_sersol = cache.get(query)
+            else:
+                caced_sersol = None
             if cached_sersol:
                 data = cached_sersol
 
