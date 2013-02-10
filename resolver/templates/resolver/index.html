@@ -10,6 +10,10 @@ Overview
 This is a simple link resolver using the 360Link API from Serials Solutions.
 </p>
 
+<p>To test from an existing OpenURL use this bookmarklet: <a id="codeOut1" href='javascript:(function(){window.location.href="http://localhost:8000/"+location.search;})();'>dj360link-openurl</a></p>
+
+<p>To test from any page with embedded COinS use this bookmarkelet: <a id="codeOut" href="javascript:(function(){window.location.href=&quot;http://localhost:8000/?&quot;+document.getElementsByClassName('Z3988')[0].getAttribute('title');})();">dj360link-coins</a></p> 
+
 <div>
         <form name="ourl" action="./" method="GET">
             <fieldset>

@@ -18,6 +18,7 @@ from utils import BaseResolverView
 import py360link as sersol
 
 #Default sersol key
+import app_settings
 from app_settings import SERSOL_KEY
 
 from models import Resource
@@ -60,7 +61,7 @@ class ResolveView(BaseResolverView):
             if app_settings.CACHE is True:
                 cached_sersol = cache.get(query)
             else:
-                caced_sersol = None
+                cached_sersol = None
             if cached_sersol:
                 data = cached_sersol
 
