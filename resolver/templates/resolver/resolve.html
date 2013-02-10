@@ -27,9 +27,13 @@
 
     {% else %}
         <h2>{{ citation.title }}</h2>
+        {% if citation.author %}
+        <p>by
         {% for author in citation.author %}
-        <p>by {{ author.name }}</p>
+        {{ author.name }}.,&nbsp;
         {% endfor %}
+        </p>
+        {% endif %}
         {% if citation.journal.name %}
         <p class="source">{{ citation.journal.name }}.</p>
         {% endif %}
