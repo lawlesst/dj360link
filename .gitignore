@@ -1,4 +1,4 @@
 
 venv
 *.pyc
-h360link/static
+db.sqlite

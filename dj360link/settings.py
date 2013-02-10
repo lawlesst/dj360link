@@ -156,7 +156,8 @@ LOGGING = {
 DEBUG = True
 
 import dj_database_url
-DATABASES = {'default': dj_database_url.config(default='sqlite:////work/dj360link/db.sqlite')}
+db = os.path.join(PROJECT_PATH, 'db.sqlite')
+DATABASES = {'default': dj_database_url.config(default='sqlite:///%s' % db)}
 
 INSTALLED_APPS += (
     #'gunicorn',

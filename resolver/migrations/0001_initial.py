@@ -12,7 +12,7 @@ class Migration(SchemaMigration):
         db.create_table('resolver_resource', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('query', self.gf('django.db.models.fields.TextField')()),
-            ('referrer', self.gf('django.db.models.fields.CharField')(max_length=200, null=True, blank=True)),
+            ('bib', self.gf('jsonfield.fields.JSONField')(default={})),
             ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('modified_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
         ))
@@ -27,11 +27,11 @@ class Migration(SchemaMigration):
     models = {
         'resolver.resource': {
             'Meta': {'object_name': 'Resource'},
+            'bib': ('jsonfield.fields.JSONField', [], {'default': '{}'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'query': ('django.db.models.fields.TextField', [], {}),
-            'referrer': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
+            'query': ('django.db.models.fields.TextField', [], {})
         }
     }
 
