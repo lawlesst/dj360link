@@ -1,4 +1,4 @@
-# Django settings for h360link project.
+# Django settings for dj360link project.
 import os
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -99,10 +99,10 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'h360link.urls'
+ROOT_URLCONF = 'dj360link.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'h360link.wsgi.application'
+WSGI_APPLICATION = 'dj360link.wsgi.application'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -153,16 +153,40 @@ LOGGING = {
     }
 }
 ###########
-DEBUG = False
+DEBUG = True
 
 import dj_database_url
-DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
+DATABASES = {'default': dj_database_url.config(default='sqlite:////work/dj360link/db.sqlite')}
 
 INSTALLED_APPS += (
-    'gunicorn',
+    #'gunicorn',
+    'django.contrib.admin',
+    'jsonfield',
+    'south',
     'resolver',
-    'storages',
+    #'storages',
 )
+
+INTERNAL_IPS = ''
+
+#Context processors
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+    'django.core.context_processors.debug',
+)
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/var/tmp/dj360link_cache',
+    }
+}
 
 #Static files
 
@@ -172,17 +196,18 @@ STATICFILES_DIRS = (
 )
     
 #Resolver app
-SERSOL_KEY = 'rl3tp7zf5x'
+import os
+SERSOL_KEY = os.getenv('SERSOL_KEY')
 
-#S3
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = 'static-heroku-360link'
+# #S3
+# AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY')
+# AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+# AWS_STORAGE_BUCKET_NAME = 'static-heroku-360link'
 
-STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+# STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-if DEBUG is True:
-    STATIC_URL = '/static/'
-else:
-    STATIC_URL = 'http://' +  's3.amazonaws.com/' + AWS_STORAGE_BUCKET_NAME + '/'
+# if DEBUG is True:
+#     STATIC_URL = '/static/'
+# else:
+#     STATIC_URL = 'http://' +  's3.amazonaws.com/' + AWS_STORAGE_BUCKET_NAME + '/'

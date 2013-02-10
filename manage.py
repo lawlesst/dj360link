@@ -3,7 +3,7 @@ import os
 import sys
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "h360link.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dj360link.settings")
 
     from django.core.management import execute_from_command_line
 

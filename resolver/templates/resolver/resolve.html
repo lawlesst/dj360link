@@ -1,4 +1,5 @@
 {% extends "resolver/base.html" %}
+{% load jsonify %}
 
 {%block library_name%}
 {% if customer %}
@@ -9,45 +10,147 @@
 {%endblock%}
 
 {% block content %}
-
 <div>
-    <h1>{{ citation.title }}</h1>
-
-    <p>by {{ citation.creator }}</p>
-    <p class="source"> {{ citation.source }}.  {{ citation.date }}.  pg. {{ citation.spage }}</p>
-</div>
-
-<div>
-    {% if has_full_text %}
-        <h3>Full text online</h3>
+    {% ifequal type "journal" %}
+        <h2>{{ citation.journal.name }}</h2>
+        {% if citation.place_of_publication %} <p>{{ citation.place_of_publication }}</p> {% endif %}
+        {% if citation.publisher %} <p>{{ citation.publisher }}</p> {% endif %}
+        {% if citation.issn %} <p>ISSN: {{ citation.issn }}</p> {% endif %}
+        <h3>Online access</h3>
         <ul>
-        {% for link in links %}
-            <li><a href="{{ link.url.article }}">{{ link.holdingData.databaseName }}</a></li>
+        {% for link in citation.links %}
+            {% ifequal link.type "journal" %}
+                <li><a href="{{ link.url }}">{{ link.provider }}  {{ link.coverage_start }} - {{ link.coverage_end }}</a></li>
+            {% endifequal %}
         {% endfor %}
         </ul>
-    {% else %}
-    <p class="msg"> No full text was found but you can place a <a href="#">request via Interlibrary Loan</a>.</p>
-    {% endif %}
 
+    {% else %}
+        <h2>{{ citation.title }}</h2>
+        {% if citation.author %}
+        <p>by
+        {% for author in citation.author %}
+        {{ author.name }}.,&nbsp;
+        {% endfor %}
+        </p>
+        {% endif %}
+        {% if citation.journal.name %}
+        <p class="source">{{ citation.journal.name }}.</p>
+        {% endif %}
+        <p>{{ citation.year }}.  {% if citation.pages %} pages: {{ citation.pages }} {% elif citation.start_page %} pg. {{ citation.start_page }}{% endif %}</p>
+
+        <div>
+        {% if has_full_text %}
+            <h3>Full text online</h3>
+            <ul>
+            {% for link in citation.links %}
+                {% ifequal link.type "article" %}
+                    <li><a href="{{ link.url }}">{{ link.anchor }}</a></li>
+                {% endifequal %}
+            {% endfor %}
+            </ul>
+        {% else %}
+        <p class="msg"> No full text was found but you can place a <a href="#">request via Interlibrary Loan</a>.</p>
+        {% endif %}
+        </div>
+    {% endifequal %}
+    {% if citation.doi %}
+        {{ citation.doi }}
+    {% endif %}
+</div>
+
+
+<div>
     <hr/>
+    {% ifequal debug True %}
+        <h4> {{ type }} via {{ rfr }}</h4>
+    {% endifequal %}
+
     <h3>More</h3>
         <ul>
-            {% if permalink %}
-            <li><a href="{{ permalink }}">Permalink</a></li>
-            {% endif %}
-            <li><a href="http://www.refworks.com/express/expressimport.asp?{{ openurl }}">      Export to Refworks</a></li>
+            {% if not permalink_view %}<li><a href="#" id="permalink">Permalink</a></li> {% endif %}
+            <!--<li><a href="http://www.refworks.com/express/expressimport.asp?{{ openurl }}"> Export to Refworks</a></li>-->
             {% if citation.doi %}
                 <li><a href="http://scholar.google.com/scholar?cites=http://dx.doi.org/{{ citation.doi }}">Citing articles via Google Scholar</a></li>
             {% endif %}
+            {% if citation.oclc %}
+                <li><a href="http://worldcat.org/oclc/{{ citation.oclc }}">Worldcat</a></li>
+            {% endif %}
         </ul>
 </div>
 
+<div id="coin">
+    <span class="Z3988" title="{{ openurl }}"></span>
+</div>
 {% endblock %}
 
 {% block footer_javascript %}
 <script>
+var bib = {{ citation|jsonify }};
 $('p.msg a').click(function () {
     alert("Implement logic to place requests.")
+});
+
+$('a#permalink').click(function() {
+    var openurl = $('#coin span').text()
+    var jqxhr = $.post("./get/ea1/", {bib: JSON.stringify(bib), dataType: 'json'}, function(data) {
+            //alert("success");
+            console.debug(data);
+            window.location.href = data.permalink;
+            return false;
+    })
+    //.done(function() { alert("second success"); })
+    .fail(function() { alert("error making permalink"); })
+    //.always(function() { alert("finished"); });
+});
+
+//
+// 
+// jQuery Django csrf
+// 
+// 
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+function sameOrigin(url) {
+    // test that a given url is a same-origin URL
+    // url could be relative or scheme relative or absolute
+    var host = document.location.host; // host + port
+    var protocol = document.location.protocol;
+    var sr_origin = '//' + host;
+    var origin = protocol + sr_origin;
+    // Allow absolute or scheme relative URLs to same origin
+    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+        // or any other URL that isn't scheme relative or absolute i.e relative.
+        !(/^(\/\/|http:|https:).*/.test(url));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+            // Send the token to same-origin, relative URLs only.
+            // Send the token only if the method warrants CSRF protection
+            // Using the CSRFToken value acquired earlier
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
 });
 </script>
 {% endblock %}
