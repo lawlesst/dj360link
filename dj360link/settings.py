@@ -198,3 +198,6 @@ CACHES = {
         'LOCATION': '/var/tmp/dj360link_cache',
     }
 }
+
+#Permalinks -- set a string here to prefix all permalinks with.
+#RESOLVER_PERMALINK_PREFIX
