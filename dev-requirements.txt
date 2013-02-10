@@ -1,3 +1,0 @@
-Django>=1.4.1
-lxml
-git+git://github.com/lawlesst/py360link.git
