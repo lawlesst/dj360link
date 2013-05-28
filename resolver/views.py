@@ -1,11 +1,6 @@
-from django.conf import settings
 from django.core.exceptions import MultipleObjectsReturned
-from django.core.urlresolvers import reverse
 from django.core.cache import cache
 from django.http import HttpResponse, HttpResponseServerError
-from django.views.generic import TemplateView
-from django.views.generic.base import View
-from django.core.urlresolvers import get_script_prefix
 
 #standard lib
 import json
@@ -23,23 +18,23 @@ from app_settings import SERSOL_KEY
 
 from models import Resource
 
+
 class ResolveView(BaseResolverView):
     template_name = 'resolver/resolve.html'
     default_json = False
     sersol_key = 'rl3tp7zf5x'
-
 
     def get(self, request, **kwargs):
         #pull sersol key from kwargs if it's there
         skey = kwargs.get('sersol_key', None)
         if skey:
             self.sersol_key = skey
-    	return super(ResolveView, self).get(request)
+        return super(ResolveView, self).get(request)
 
     def get_context_data(self, **kwargs):
-    	"""
-    	Handle the request and return the 'resolver' to the user.
-    	"""
+        """
+        Handle the request and return the 'resolver' to the user.
+        """
         from bibjsontools import to_openurl, from_openurl
         from utils import merge_bibjson
         context = super(ResolveView, self).get_context_data(**kwargs)
@@ -80,7 +75,7 @@ class ResolveView(BaseResolverView):
             citation = merge_bibjson(orig_bib, this_bib)
             #generate a new openurl based on merged bibjson objects
             openurl = to_openurl(citation)
-        
+
         #shortcut some values
         links = citation.get('links')
         ids = citation.get('identifier', [])
@@ -99,7 +94,7 @@ class ResolveView(BaseResolverView):
         context['rfr'] = citation.get('_rfr', 'unknown')
         context['library'] = citation.get('_library')
         citation['_openurl'] = openurl
-        context['openurl'] =  openurl + '&url_ver=Z39.88-2004'
+        context['openurl'] = openurl + '&url_ver=Z39.88-2004'
         return context
 
     def has_full_text(self, links):
@@ -120,10 +115,11 @@ class ResolveView(BaseResolverView):
                 return idnt.get('id')
         return
 
+
 class PermalinkView(ResolveView):
     template_name = 'resolver/resolve.html'
     default_json = False
-    
+
     def get(self, request, **kwargs):
         from utils import base62
         #pull permalink key from kwargs if it's there
@@ -136,7 +132,6 @@ class PermalinkView(ResolveView):
         return super(PermalinkView, self).get(request)
 
     def post(self, *args, **kwargs):
-        from bibjsontools import from_openurl
         out = {}
         posted = self.request.POST
         bib = json.loads(posted.get('bib'))
@@ -145,7 +140,6 @@ class PermalinkView(ResolveView):
             resource, created = Resource.objects.get_or_create(bib=bib)
         except MultipleObjectsReturned:
             resource = Resource.objects.filter(bib=bib)[0]
-            created = False
         resource.save()
         base = "http://%s" % (self.request.META.get('HTTP_HOST').rstrip('/'))
         out['permalink'] = base + resource.get_absolute_url()
