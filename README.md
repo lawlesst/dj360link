@@ -11,7 +11,7 @@ $ cd dj360link
 $ pip install -r requirements
 $ export SERSOL_KEY=yoursersolkey
 $ python manage.py syncdb
-$ python runserver 0.0.0.0:8000
+$ python manage.py runserver 0.0.0.0:8000
 ~~~~
 point your browser at http://localhost:8000
 
