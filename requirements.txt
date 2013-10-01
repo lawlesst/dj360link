@@ -3,5 +3,5 @@ dj-database-url
 south
 requests
 django-jsonfield
-git+http://github.com/lawlesst/py360link.git@sorting-db
+git+http://github.com/lawlesst/py360link.git@dev
 git+git://github.com/lawlesst/bibjsontools.git
