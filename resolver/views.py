@@ -9,7 +9,7 @@ import logging
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-from utils import BaseResolverView
+from .utils import BaseResolverView
 import py360link as sersol
 
 #Default sersol key
